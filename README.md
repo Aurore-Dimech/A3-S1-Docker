@@ -1,8 +1,4 @@
 # Rendu docker 
-_(juste en dessous des badges sympatiques à placer)_
-
-[![forthebadge](http://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com)  [![forthebadge](http://forthebadge.com/images/badges/powered-by-electricity.svg)](http://forthebadge.com)
-
 Ce projet est la création d'une une application complète
 comprenant plusieurs services. Elle configure et
 déploye ces services à l'aide de Docker et Docker Compose tout en
@@ -15,7 +11,7 @@ Clonez le projet sur votre machine
 
 ### Pré-requis
 
-Ce qu'il est requis d'avoir pour commencer avec votre projet...
+Ce qu'il est requis d'avoir pour commencer avec votre projet :
 
 - Installer et ouvrer docker moteur sur notre machine 
 - Installer et mettre en marche une base de données PostgreSql
@@ -29,19 +25,15 @@ Une fois le projet cloné et les pré-requis installés suivez ces étapes dans 
   `docker compose up -d`
 <br/>
 
-Ensuite vous pouvez montrer ce que vous obtenez au final...
-
 ## Démarrage
 
 - ##### Ouvrir deux fênetres de votre navigateur 
-<http://localhost:5173/> pour le front de votre application
+<http://localhost:5173/> pour le frontend de votre application
 <http://localhost:3000/> pour le backend de votre application -> Vous aurez l'affichage d'un message "Hello"
 <br/>
 - ##### A partir de la seconde URL ajoutez deux chemin : 
-<http://localhost:3000/create-table> pour créer une table user dans votre base de donnees postgres. 
-Ensuite, <http://localhost:3000/add-user> pour créer un personnage nommé John Doe dans votre base de donnés avec son email johndoe@email.fr .
-
-Ensuite vous pouvez montrer ce que vous obtenez au final...
+<http://localhost:3000/create-table> pour créer une table animal dans votre base de données postgres. 
+Vous pouvez ensuite fermer cet onglet.
 
 ## Fabriqué avec
 
@@ -49,15 +41,6 @@ Ensuite vous pouvez montrer ce que vous obtenez au final...
 * [Node](https://nodejs.org/fr) - API (back-end)
 * [Postgres](https://www.postgresql.org/) - Base de données (back-end)
 
-
-
-## Versions
-Listez les versions ici 
-_exemple :_
-**Dernière version stable :** 5.0
-**Dernière version :** 5.1
-Liste des versions : [Cliquer pour afficher](https://github.com/your/project-name/tags)
-_(pour le lien mettez simplement l'URL de votre projets suivi de ``/tags``)_
 
 ## Auteurs
 
