@@ -5,37 +5,38 @@ déploye ces services à l'aide de Docker et Docker Compose tout en
 respectant les bonnes pratiques de sécurité, de gestion des logs et de
 monitoring.
 
-## Pour commencer
-
-Clonez le projet sur votre machine  
-
 ### Pré-requis
 
 Ce qu'il est requis d'avoir pour commencer avec votre projet :
 
-- Installer et ouvrer docker moteur sur notre machine 
-- Installer et mettre en marche une base de données PostgreSql
+- Avoir installé et ouvert docker desktop sur votre machine,
+- Avoir installé et lancé une base de données PostgreSql.
+
+## Pour commencer
+
+Clonez le projet sur votre machine.
+Clonez le .env.example et renommez le en .env dans le dossier backend.
+Clonez le .env.example et renommez le en .env dans le dossier frontend.
 
 
 ### Installation
 
-Une fois le projet cloné et les pré-requis installés suivez ces étapes dans l'ordre : 
-
- - ##### Exécuter dans le dossier du projet : 
-  `docker compose up -d`
+Une fois les pré-requis complétés et le projet cloné, allez dans le dossier du projet (pern-app) et tapez dans votre terminal la commande : `docker compose up -d`
 <br/>
 
 ## Démarrage
 
-- ##### Ouvrir deux fênetres de votre navigateur 
-<http://localhost:5173/> pour le frontend de votre application
-<http://localhost:3000/> pour le backend de votre application -> Vous aurez l'affichage d'un message "Hello"
+- ##### Initialisez la base de données
+Ouvrez <http://localhost:3000/>. Cela correspond au backend de votre application -> Vous aurez l'affichage d'un message "Hello!"
 <br/>
-- ##### A partir de la seconde URL ajoutez deux chemin : 
-<http://localhost:3000/create-table> pour créer une table animal dans votre base de données postgres. 
-Vous pouvez ensuite fermer cet onglet.
+Allez maintenant à <http://localhost:3000/create-table> pour créer une table animal dans votre base de données postgres. 
+Vous pouvez ensuite fermer cet onglet, et utiliser uniquement <http://localhost:5173/>.
 
-## Fabriqué avec
+- ##### Accédez à votre site : 
+<http://localhost:5173/> pour le frontend de votre application.
+Une fois la base de données initialisée, vous pouvez utiliser cette URL pour faire toutes vos actions.
+
+## Développé avec
 
 * [React](https://fr.react.dev/) - Bibliothèque javascript (front-end)
 * [Node](https://nodejs.org/fr) - API (back-end)

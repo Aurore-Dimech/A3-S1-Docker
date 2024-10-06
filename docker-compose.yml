@@ -1,51 +1,59 @@
+# Le code ci-dessous est commenté afin d'expliquer les différentes lignes présentes dans ce document
+# Les lignes qui se répètent ne sont commentées que lors de la première apparition, afin d'éviter des répétitions trop importantes
+
 services:
 
-  web:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: web
-    ports:
-      - "5173:5173"
-    depends_on:
-      - api
-    command: npm run dev
-    # logging:
-    #   driver: "json-file"
-    #   options:
-    #     max-size: "10m" #ici nous voulons que le fichier de log ne dépasse pas 10Mo
-    #     max-file: "3" #ici nous voulons que le fichier de rotation ne dépasse pas 3 fichiers
-    # user: "1001"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    networks:
-      - my_network
+  web: #cette partie renvoie au frontend de l'application
+    build: #cette commande permet de lier le Dockerfile du frontend
+      context: ./frontend #on indique ici le chemin vers le Dockerfile concerné
+      dockerfile: Dockerfile #on indique ici le fichier à utiliser
+    container_name: web #cela permet de donner un nom au conteneur créé. On a préféré le nommer ici afin que la présentation dans docker desktop soit plus compréhensible et claire, et qu'on sache ainsi ce à quoi est lié le conteneur directement à partir de son nom
+    ports: #on expose et map les ports afin que notre application puisse être accessible dans un navigateur, et que le port de l'utilisateur corresponde bien à celui du service
+      - "5173:5173" #on met d'abord le port sur lequel
+    depends_on: #cette commande permet de s'assurer que ce conteneur soit créé après celui du backend (api). Nous l'avons utilisé puisque notre frontend affiche et agit sur des données issues de notre backend, et donc qu'il faut que celui-ci soit en état de marche avant de pouvoir accéder et faire des actions sur le frontend
+      - api #nom du conteneur devant être créé préalablement. Ici, c'est celui du backend que nous voulons (api)
+    command: npm run dev #commande à effectuer au démarage du container
+    logging: #toute cette partie permet de spécifier des paramètres concernant les logs (les sorties standars et les erreurs) du conteneur du frontend. Cela est particulièrement important afin d'avoir des retours sur le fonctionnement de l'application, et ce notamment lorsque des bugs apparaissant (avec les logs, il est possible d'avoir plus de détails sur les problèmes rencontrés et il est ainsi plus facile de les résoudre)
+      driver: "json-file" #docker utilise par défaut le driver de log json-file, mais nous le remettons afin de s'assurer que ce driver soit bien utilisé. Le driver json-file écrit les messages des logs sous forme de fichier JSON sur l'hôte
+      options: #différentes options existent pour modifier l'affichage des logs
+        max-size: "10m" #ici nous voulons que le fichier de log ne dépasse pas 10Mo. Cela évite de garder des fichiers de log trop volumineux, puisque dès lors que le fichier de log actuel atteint cette taille, un autre fichier est créé et les nouveaux logs sont alors enregistrés sur celui-ci
+        max-file: "3" #ici nous voulons que seulement 3 fichiers de logs soit sauvegardés. Ainsi, dès qu'un quatrième fichier de log est créé, le plus ancien est supprimé. Cela permet de n'avoir au maximum que les 3 fichiers de logs les plus récents
+        #Au final, cette section spécifie et nous permet d'avoir au maximum 3 fichiers de logs qui pèsent au maximum 10Mo chacun
+    cap_drop: #le cap drop est lié à la sécurité. Il limite la possibilité d'effectuer des actions sensibles à partir d'un conteneur 
+      - ALL #on retire ici toutes les permissions, afin que l'utilisateur ne puisse pas faire des actions néfastes à partir de ce conteneur
+    user: "1001" #spécifier l'utilisateur est également une sécurité. En ne le mettant pas en tant que root, cela empêche la possibilité d'effectuer des actions néfastes à partir de ce conteneur
+    volumes: #les volumes sont une façon de pouvoir garder des informations liées à un conteneur même lorsque ce conteneur est fermé, et de faire passer des fichiers entre l'hôte et le container
+      - ./frontend:/app #on indique ici que les fichiers placés dans le dossier appelé frontend à partir de là où est placé ce docker-compose sont liés à au dossier /app dans le conteneur docker. Cela est utile car permet entre autres de faire des modifications dans le dossier /frontend sur notre machine et de les voir effectués en temps réel dans le conteneur
+      - /app/node_modules #ici, il n'y a pas de lien vers un dossier dans l'hôte. Cela évite que les fichiers existants dans le /app/node_modules du conteneur soit écrasés par les fichiers placés dans le node_modules de l'hôte, qui pourrait ne pas exister ou alors ne pas être compatible
+    networks: #les réseaux virtuels de dockers sont un moyen de connecter les conteneurs docker entre eux ou au réseau de l'hôte. Créer un réseau personnalisé limite ainsi les connexions du conteneur auquel il est lié, et donc d'isoler les processus
+      - my_network #ici, on ne lie qu'un seul réseau appelé "my_network". Celui-ci est défini plus bas
 
-  api:
+  api: #cette partie renvoie au backend de l'application
     build: ./backend
     ports:
       - "3000:3000"
     depends_on:
-      - db
-    restart: always
+      - db #cette commande permet de s'assurer que ce conteneur soit créé après celui de la base de donnée (db). Nous l'avons utilisé puisque notre backend agit sur des données venant de notre base de données (en ajoutant ou supprimant des données par exemple), et donc qu'il faut que la base de données soit en état de marche avant de lancer le backend
+    restart: always #cette commande permet de relancer le conteneur si celui-ci s'arrête (dans le cas d'un crash, d'une erreur, ou même d'un arrêt manuel). Comme le backend est un service primordial de notre application, on veut qu'il soit toujours en état de marche, d'où la présence de cette ligne
     logging:
       driver: "json-file"
       options:
-        max-size: "10m" #ici nous voulons que le fichier de log ne dépasse pas 10Mo
-        max-file: "3" #ici nous voulons que le fichier de rotation ne dépasse pas 3 fichiers
+        max-size: "10m"
+        max-file: "3"
+    cap_drop:
+      - ALL
     user: "1001"
     volumes:
       - ./backend:/app
       - /app/node_modules
-    environment:
-      - NODE_ENV=development
-      - PORT=3000
-      - DB_HOST=db
-      - DB_PORT=5432
-      - DB_USER=postgres
-      - DB_PASSWORD=postgres
-      - DB_NAME=postgres
+    environment: #toutes les variables d'environnements sont décrites ici
+      - NODE_ENV=development #cette ligne différencie le mode d'environnement pour une application Node.js. Cela permet notemment de faire la distinction entre un environnement de développement, de test ou de production. Ici, on laisse en mode développement, car cela peut être lié à des fonctionnalités utiles pendant les phases de développement (des messages de logs plus précis par exemple)
+      - PORT=3000 #cela explicite le port à partir duquel l'application écoutera les requêtes HTTP. Dans le cas présent, cela permet d'accéder au backend à l'intérieur du conteneur à partir du port 3000
+      - DB_HOST=db #on met ici le nom d'hôte du serveur de base de données. "db" est le nom du service de base de données défini dans ce même fichier, présent ci-dessous
+      - DB_PORT=5432 #il s'agit ici du port sur lequel le serveur de base de données écoutera. Le 5432 est le port par défaut de PostgreSQL, d'où le fait que nous l'utilisons ici
+      - DB_USER=postgres #on met ici le nom d'utilisateur pour se connecter à la base de données
+      - DB_PASSWORD=postgres #on met ici le mot de passe de la base de données
+      - DB_NAME=postgres #on met ici le nom de la base de données à laquelle on souhaite se connecter
     command: npm run dev
     container_name: api
     networks:
@@ -54,15 +62,17 @@ services:
   db:
     image: postgres:13
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=postgres
-    # logging:
-    #   driver: "json-file"
-    #   options:
-    #     max-size: "10m" #ici nous voulons que le fichier de log ne dépasse pas 10Mo
-    #     max-file: "3" #ici nous voulons que le fichier de rotation ne dépasse pas 3 fichiers
-    # user: "1001"
+      - POSTGRES_USER=postgres #on met ici le nom d'utilisateur pour se connecter à la base de données
+      - POSTGRES_PASSWORD=postgres #on met ici le mot de passe de la base de données
+      - POSTGRES_DB=postgres #on met ici le nom de la base de données à laquelle on souhaite se connecter
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m" 
+        max-file: "3" 
+    cap_drop:
+      - ALL
+    user: "postgres" #on spécifie ici postgres comme utilisateur, car celui-ci permet d'avoir accès aux permissions nécessaires afin de gérer la base de données, tout en continuer de l'empêchet de faire des actions néfastes
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
@@ -71,6 +81,6 @@ services:
 volumes:
   postgres_data:
 
-networks:
-  my_network:
-    driver: bridge
+networks: #on définit ici les différents réseaux utilisés par nos conteneurs
+  my_network: #en mettant le nom du réseau, on le crée, et on peut également lui spécifier des paramètres
+    driver: bridge #mettre un network en bridge permet aux différents conteneurs de auquel il est lié de communiquer entre eux

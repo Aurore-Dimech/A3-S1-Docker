@@ -34,12 +34,8 @@ function App() {
     }
   };
 
-  const handleChange2 = (event) => {
-    setAnimalUpdate(event.target.value);
-  };
-
   const submit = () => {
-    const state = { setName, setType, animalUpdate };
+    const state = { setName, setType };
 
     fetch(`${import.meta.env.VITE_SOME_KEY}/add-animal`, {
       method: 'POST',
