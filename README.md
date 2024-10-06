@@ -15,13 +15,15 @@ Ce qu'il est requis d'avoir pour commencer avec votre projet :
 ## Pour commencer
 
 Clonez le projet sur votre machine.
+Clonez le .env.example dans le dossier principal et renommez le en .env.
 Clonez le .env.example et renommez le en .env dans le dossier backend.
 Clonez le .env.example et renommez le en .env dans le dossier frontend.
-
+<br/>
+**Nous avons choisi ici de mettre les vraies valeurs du .env dans le .env.example. Cela est évidemment une pratique à ne surtout pas reproduire, puisque les données dedans sont privées. Nous avons fait ce choix ici car il s'agit d'un exercice dans le cadre de nos études et préférons faciliter le processus de correction.**
 
 ### Installation
 
-Une fois les pré-requis complétés et le projet cloné, allez dans le dossier du projet (pern-app) et tapez dans votre terminal la commande : `docker compose up -d`
+Une fois les pré-requis complétés et le projet cloné, allez dans le dossier du projet et tapez dans votre terminal la commande : `docker compose up -d`
 <br/>
 
 ## Démarrage
@@ -29,11 +31,11 @@ Une fois les pré-requis complétés et le projet cloné, allez dans le dossier 
 - ##### Initialisez la base de données
 Ouvrez <http://localhost:3000/>. Cela correspond au backend de votre application -> Vous aurez l'affichage d'un message "Hello!"
 <br/>
-Allez maintenant à <http://localhost:3000/create-table> pour créer une table animal dans votre base de données postgres. 
+Allez maintenant à <http://localhost:3000/create-table> pour créer une table animal dans votre base de données postgres. <br />
 Vous pouvez ensuite fermer cet onglet, et utiliser uniquement <http://localhost:5173/>.
 
 - ##### Accédez à votre site : 
-<http://localhost:5173/> pour le frontend de votre application.
+<http://localhost:5173/> pour le frontend de votre application.<br/>
 Une fois la base de données initialisée, vous pouvez utiliser cette URL pour faire toutes vos actions.
 
 ## Développé avec
