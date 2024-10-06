@@ -1,4 +1,5 @@
 services:
+
   web:
     build:
       context: ./frontend
@@ -9,12 +10,12 @@ services:
     depends_on:
       - api
     command: npm run dev
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m" #ici nous voulons que le fichier de log ne dépasse pas 10Mo
-        max-file: "3" #ici nous voulons que le fichier de rotation ne dépasse pas 3 fichiers
-    user: "1001"
+    # logging:
+    #   driver: "json-file"
+    #   options:
+    #     max-size: "10m" #ici nous voulons que le fichier de log ne dépasse pas 10Mo
+    #     max-file: "3" #ici nous voulons que le fichier de rotation ne dépasse pas 3 fichiers
+    # user: "1001"
     volumes:
       - ./frontend:/app
       - /app/node_modules
@@ -22,7 +23,7 @@ services:
       - my_network
 
   api:
-    build: ./backen
+    build: ./backend
     ports:
       - "3000:3000"
     depends_on:
@@ -56,26 +57,16 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m" #ici nous voulons que le fichier de log ne dépasse pas 10Mo
-        max-file: "3" #ici nous voulons que le fichier de rotation ne dépasse pas 3 fichiers
-    user: "1001"
+    # logging:
+    #   driver: "json-file"
+    #   options:
+    #     max-size: "10m" #ici nous voulons que le fichier de log ne dépasse pas 10Mo
+    #     max-file: "3" #ici nous voulons que le fichier de rotation ne dépasse pas 3 fichiers
+    # user: "1001"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - my_network
-
-  # syslog:
-  #   image: ubuntu:latest  
-  #   command: >
-  #     sh -c "apt-get update && apt-get install -y rsyslog && rsyslogd -n"
-  #   ports:
-  #     - "514:514/udp" 
-  #   networks:
-  #     - my_network
-
 
 volumes:
   postgres_data:
