@@ -76,6 +76,7 @@ Voici les explications descritives de ce qu'acccomplissent les commandes utilis�
 ![ vérifie la configuration et rotation des logs](./screenshoot/docker_log_redirections_rotatio.png "Inspection des logs") nous permet de vérifier la configuration et la rotation des logs de chaque service.
 Les loggings driver son mise en place directement dans le fichier `docker-compose.yml`
 <br/>
+
 - La commande `docker composer logs -f` ![ vérifie la configuration et rotation des logs](./screenshoot/docker_log_redirections_STR.png "Inspection des logs") nous permet de suivre les logs en temps en réel. 
 
 ##### Monitoring 
