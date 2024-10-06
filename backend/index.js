@@ -71,3 +71,7 @@ app.get("/api", (req, res) => {
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
 });
+
+// const logger = require('./logger');
+
+// logger.info("L'application à été rediriger vers le syslog");
