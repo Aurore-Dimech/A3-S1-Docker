@@ -73,13 +73,13 @@ Voici les explications descritives de ce qu'acccomplissent les commandes utilis�
 
 ##### Gestion des logs  
 - La commande `docker inspect <container_id> --format='{{json.HostConfig.LogConfig}}'`
-![ vérifie la configuration et rotation des logs](/screenshoot/docker_log_redirections_rotatio.png "Inspection des logs") nous permet de vérifier la configuration et la rotation des logs de chaque service.
+![ vérifie la configuration et rotation des logs](/A3-S1-Docker/screenshoot/docker_log_redirections_rotatio.png "Inspection des logs") nous permet de vérifier la configuration et la rotation des logs de chaque service.
 Les loggings driver son mise en place directement dans le fichier `docker-compose.yml`
 <br/>
-- La commande `docker composer logs -f` ![ vérifie la configuration et rotation des logs](/screenshoot/docker_log_redirections_STR.png "Inspection des logs") nous permet de suivre les logs en temps en réel. 
+- La commande `docker composer logs -f` ![ vérifie la configuration et rotation des logs](/A3-S1-Docker/screenshoot/docker_log_redirections_STR.png "Inspection des logs") nous permet de suivre les logs en temps en réel. 
 
 ##### Monitoring 
--  La commande `docker stats`![ vérifie la configuration et rotation des logs](/screenshoot/monitoring_stats.png "Inspection des logs") nous permet de surveiller l’utilisation des ressources (CPU, mémoire, réseau).
+-  La commande `docker stats`![ vérifie la configuration et rotation des logs](/A3-S1-Docker/screenshoot/monitoring_stats.png "Inspection des logs") nous permet de surveiller l’utilisation des ressources (CPU, mémoire, réseau).
 
 
 
