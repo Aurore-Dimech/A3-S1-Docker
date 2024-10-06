@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
-  const [users, setUsers] = useState(null)
+  const [setName, setSetName] = useState('');
+  const [setType, setSetType] = useState('');
+  const [animals, setAnimals] = useState(null)
+  const [editAnimal, setEditAnimal] = useState({ id: null, name: '', type: '' });
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
@@ -17,7 +17,7 @@ function App() {
     try {
       const response = await fetch(`${import.meta.env.VITE_SOME_KEY}/api`)
       const data = await response.json()
-      setUsers(data)
+      setAnimals(data)
       setLoading(false)
     } catch (error) {
       setError('Error fetching data: ' + error.message)
@@ -25,39 +25,96 @@ function App() {
     }
   }
 
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    if (name === 'setName') {
+      setSetName(value);
+    } else if (name === 'setType') {
+      setSetType(value);
+    }
+  };
+
+  const handleChange2 = (event) => {
+    setAnimalUpdate(event.target.value);
+  };
+
+  const submit = () => {
+    const state = { setName, setType, animalUpdate };
+
+    fetch(`${import.meta.env.VITE_SOME_KEY}/add-animal`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(state),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(() => {
+        alert('Animal ajouté post');
+        document.location.reload();
+      })
+      .catch((error) => {
+        console.error('There was an error!', error);
+      });
+  };
+
+  const deleteAnimal = (id) => {
+    if (confirm("Do you want to delete? ")) {
+      fetch(`${import.meta.env.VITE_SOME_KEY}/delete-animal/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(() => {
+          alert('Animal supprimé');
+          document.location.reload();
+        })
+        .catch((error) => {
+          console.error('There was an error!', error);
+        });
+    }
+  }
+
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <h1>Vive la ferme</h1>
+      <div className='add-animal'>
+        <h2>Ajouter un animal</h2>
+        <div className='form'>
+          <input name='setName' placeholder='Nom' onChange={handleChange}/>
+          <input name='setType' placeholder='Type' onChange={handleChange} />
+        </div>
+        <button className='my-2 button-add' onClick={submit}>Submit</button>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <div className="users-container">
+
+      <div className="animals-container">
+        <h2>Liste d'animaux :</h2>
         {loading && <p>Loading...</p>}
         {error && <p className="error">{error}</p>}
-        {users && users.map((user) => (
-          <div key={user.id} className="user-card">
-            <h2>{user.name}</h2>
-            <p>ID: {user.id}</p>
-            <p>Email: {user.email}</p>
+        {animals && animals.map((animal) => (
+          <div key={animal.id} className="animal-card">
+            <div>
+              <h3>{animal.name}</h3>
+              <p>Type: {animal.type}</p>
+            </div>
+            <div>
+              <button onClick={() => deleteAnimal(animal.id)}>Delete</button>
+            </div>
           </div>
         ))}
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }
